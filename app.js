@@ -86,7 +86,7 @@ const BookmarkListScreenHTML = () => {
                             <h3>${ item.title }</h3>
                         </div>
                         <div class="bookmarks-rating-container">
-                            <img class="bookmarks-rating-img" src="img/${ item.rating }-stars.png" alt="${ item.rating } Star Rating">
+                            <img class="bookmarks-rating-img" src="img/${ item.rating }-star.png" alt="${ item.rating } Star Rating">
                         </div>
                     </div>
                     <div class="bookmarks-info-container">
@@ -225,14 +225,28 @@ const rateBookmark = () => {
 };
 
 const addBookmark = () => {
+// Adds a bookmark obj to the store.bookmarks array.
 
     $ ( 'main' ).on ( 'submit', '#bookmarks-form', e => {
 		
-		//console.log ( 'formSubmitHandler started' );
+		e.preventDefault ();
 
-        e.preventDefault ();
+        newBookmark = {
+        
+            id: cuid(),
+            title: $ ( '#add-bookmark-title' ).val(),
+            rating: $ ( '#bookmark-rating' ).val(),
+            url: $ ( '#add-bookmark-url' ).val(),
+            description: $ ( '#add-bookmark-description' ).val(),
+            expanded: true
+        
+        };
 
-        alert ( 'form submit' );
+        store.bookmarks.push ( newBookmark );
+
+        store.adding = false;
+
+        render ();
 
     });
 
@@ -240,7 +254,7 @@ const addBookmark = () => {
 
 const deleteBookmark = () => {
 
-    $ ( '.bookmarks-trash-icon' ).on ( 'click', e => {
+    $ ( 'main' ).on ( 'click', '.bookmarks-trash-icon', e => {
 
         let bookmarkId = $ ( e.currentTarget ).parent ().parent ().parent ().attr ( 'id' );
 
