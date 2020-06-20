@@ -1,0 +1,359 @@
+body {
+	background-color: #000;
+	padding: 10px;
+	color: #fff;
+}
+
+header {
+	width: 100%;
+	text-align: center;
+	border: 1px solid #fff;
+	border-radius: 10px;
+}
+
+main {
+	display: flex;
+	margin: 10px 0 0 0;
+	width: 100%;
+	align-items: center;
+	flex-direction: column;
+	border: 1px solid #fff;
+	border-radius: 10px;
+}
+
+h2 {
+	font-size: 44px;
+}
+
+h3 {
+	font-size: 44px;
+}
+
+#form-container {
+	flex: 1;
+	margin: 16px auto 16px auto;
+	width: 94%;
+	border: 1px solid #fff;
+	border-radius: 10px;
+	padding: 10px;
+}
+
+@media (min-width:991px) {
+	#form-container {
+		margin: 14px auto 14px auto;
+		width: 96%;
+	}
+}
+
+#bookmarks-form legend {
+	display: block;
+	margin: 16px auto 16px auto;
+	width: 94%;
+	border: 1px solid #fff;
+	border-radius: 10px;
+	padding: 10px;
+	text-align: center;
+}
+
+@media (min-width:991px) {
+	#bookmarks-form legend {
+		margin: 14px auto 14px auto;
+		width: 96%;
+	}
+}
+
+/* App Tools */
+
+#app-tools {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin: 26px auto 16px auto;
+	max-height: 74px;
+	width: 94%;
+	border: 1px solid #fff;
+	border-radius: 10px;
+	padding: 10px;
+}
+
+@media (min-width:991px) {
+	#app-tools {
+		margin: 24px auto 14px auto;
+		width: 96%;
+	}
+}
+
+.app-tools-item {
+	flex: 1;
+	padding-top: 0;
+}
+
+.app-tool-icon {
+	max-height: 74px;
+	height: 100%;
+	max-width: 74px;
+	width: 100%;
+	cursor: pointer;
+}
+
+.search-label-container {
+	display: none;
+}
+
+.search-container {
+	display: none;
+	flex-grow: 5;
+}
+
+#search-text-input {
+	display: inline-block;
+	margin: 0;
+	min-height: 78px;
+	height: 99%;
+	width: 80%;
+	background-color: #000;
+	border: 1px solid #fff;
+	border-radius: 10px 0 0 10px;
+	text-align: end;
+	font-size: 44px;
+	padding-right: 6px;
+	color: #fff;
+
+}
+
+#search-button {
+	display: inline-block;
+	margin: 0;
+	min-height: 83px;
+	height: 100%;
+	background-color: #000;
+	border: 1px solid #fff;
+	border-radius: 0 10px 10px 0;
+	font-size: 44px;
+	color: #fff;
+}
+
+.filter-label-container {
+	display: none;
+	position: absolute;
+	left: 40%;
+	z-index: 8;
+	font-size: 44px;
+	color: #fff;
+}
+
+.filter-select-container {
+	flex-grow: 5;
+}
+
+#filter-select {
+	width: 98%;
+	height: 100%;
+	min-height: 74px;
+	background-color: #000;
+	border: 1px solid #fff;
+	border-radius: 10px;
+	padding: 10px;
+	font-size: 33px;
+	color: #fff;
+	background: url(img/icon-filter-arrow.png) no-repeat right #000;
+	background-size: 60px;
+    -webkit-appearance: none;
+	background-position-x: right;
+	cursor: pointer;
+}
+
+/* Bookmarks List */
+
+#bookmarks-list-container {
+	flex: 1;
+    margin: 12px;
+    border: 1px solid #fff;
+    border-radius: 10px;
+	overflow: hidden;
+}
+
+#bookmarks-list-ul {
+	list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+li:last-child {
+	border-bottom: none;
+}
+
+.bookmarks-list-li {
+	border-bottom: 1px solid #fff;
+	padding: 10px;
+	cursor: pointer;
+}
+
+.bookmarks-heading {
+	display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.bookmarks-heading:hover {
+	background-color: #fff;
+	color :#000;
+}
+
+.bookmarks-title-container {
+    flex: 5;
+}
+
+.bookmarks-rating-container {
+	flex: 1;
+}
+
+.bookmarks-rating-img {
+	height: 32px;
+}
+
+.bookmarks-info-container {
+	display: none;
+}
+
+.bookmarks-link-container {}
+
+.bookmarks-link-container a {
+	font-size: 33px;
+	color: #fff;
+}
+
+.bookmarks-description-container {
+	margin: 15px 0 0 0;
+	font-size: 33px;
+}
+
+.bookmarks-trash-icon-container {
+	flex: 1;
+	/*display: none;*/
+	/*display: inline-block;*/
+	margin-top: 15px;
+	cursor: pointer;
+}
+
+.bookmarks-trash-icon {
+	height: 62px;
+    width: 62px;
+}
+
+/* Add Bookmark */
+
+#add-bookmark-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+    margin: 12px;
+    border: 1px solid #fff;
+    border-radius: 10px;
+	overflow: hidden;
+	padding: 10px;
+}
+
+#title-your-bookmark-container {
+	flex: 1;
+	width: 100%;
+}
+
+#add-bookmark-title-label {
+	display: block;
+	color: #fff;
+	font-size: 44px;
+}
+
+#add-bookmark-title {
+	display: block;
+	width: 99%;
+	background-color: #000;
+	border: 1px solid #fff;
+	border-radius: 10px;
+	color: #fff;
+	font-size: 44px;
+}
+
+#link-your-bookmark-container {
+	flex: 1;
+	width: 100%;
+}
+
+#add-bookmark-url-label {
+	display: block;
+	color: #fff;
+	font-size: 44px;
+}
+
+#add-bookmark-url{
+	display: block;
+	width: 99%;
+	background-color: #000;
+	border: 1px solid #fff;
+	border-radius: 10px;
+	color: #fff;
+	font-size: 44px;
+}
+
+#rate-your-bookmark-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 30px 0 20px 0;
+}
+
+.rate-your-bookmark-star-container {
+    flex: 1;
+}
+
+.rate-your-bookmark-star-hollow {
+	width: 100%;
+	cursor: pointer;
+}
+
+#describe-your-bookmark-container {
+	flex: 1;
+	width: 100%;
+}
+
+#add-bookmark-description-label {
+	display: block;
+	color: #fff;
+	font-size: 44px;
+}
+
+#add-bookmark-description {
+	display: block;
+	width: 99%;
+	background-color: #000;
+	border: 1px solid #fff;
+	border-radius: 10px;
+	color: #fff;
+	font-size: 44px;
+}
+
+#bookmarks-form-buttons-container {
+	flex: 1;
+	width: 100%;
+}
+
+#bookmarks-form-buttons-container input {
+	display: block;
+	width: 99%;
+	margin: 14px 0 0 0;
+	background-color: #000;
+	border: 1px solid #fff;
+	border-radius: 10px;
+	color: #fff;
+	font-size: 44px;
+	cursor: pointer;
+}
+
+#bookmarks-form-buttons-container input:hover {
+	background-color: #fff;
+	border: 1px solid #fff;
+	color: #000;
+}
