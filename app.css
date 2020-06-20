@@ -243,6 +243,19 @@ li:last-child {
     width: 62px;
 }
 
+.bookmarks-edit-icon-container {
+	flex: 1;
+	/*display: none;*/
+	/*display: inline-block;*/
+	margin-top: 15px;
+	cursor: pointer;
+}
+
+.bookmarks-edit-icon {
+	height: 62px;
+    width: 62px;
+}
+
 /* Add Bookmark */
 
 #add-bookmark-container {

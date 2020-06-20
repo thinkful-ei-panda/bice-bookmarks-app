@@ -75,7 +75,7 @@ const toggleExpandBookmark = () => {
 
 };
 
-const BookmarkListScreenHTML = () => {
+const bookmarkListScreenHTML = () => {
     let str = [];
     store.bookmarks.forEach( ( item, index ) => {
         if ( store.filter === 0 || item.rating == store.filter ) {
@@ -101,6 +101,9 @@ const BookmarkListScreenHTML = () => {
                         <div class="bookmarks-trash-icon-container">
                             <img class="bookmarks-trash-icon" src="img/icon-trash.png" alt="Delete this bookmark">
                         </div>
+                        <div class="bookmarks-edit-icon-container">
+                            <img class="bookmarks-edit-icon" src="img/icon-edit.png" alt="Edit this bookmark">
+                        </div>
                     </div>
                 </li>`);
         }
@@ -120,9 +123,80 @@ const BookmarkListScreenHTML = () => {
         
 };
 
-const AddBookmarkScreenHTML = () => {
+const addBookmarkScreenHTML = () => {
     return `
     				<div id="add-bookmark-container">
+
+                        <div id="title-your-bookmark-container">
+
+                            <label for="add-bookmark-title" id="add-bookmark-title-label" name="add-bookmark-title-label">Add A Bookmark Title</label>
+
+                            <input type="text" id="add-bookmark-title" name="add-bookmark-title" placeholder="Enter title here">
+                    
+                        </div>
+
+                        <div id="link-your-bookmark-container">
+
+                            <label for="add-bookmark-url" id="add-bookmark-url-label" name="add-bookmark-url-label">Add A Bookmark URL</label>
+            
+                            <input type="text" id="add-bookmark-url" name="add-bookmark-url" placeholder="Enter URL here">
+                
+                        </div>
+
+                        <div id="rate-your-bookmark-container">
+
+                            <input type="hidden" value="0" id="bookmark-rating" name="bookmark-rating">
+
+                            <div class="rate-your-bookmark-star-container">
+                                <img class="rate-your-bookmark-star-hollow" id="star-rating-1" src="img/icon-star-hollow.png">
+                            </div>
+
+                            <div class="rate-your-bookmark-star-container">
+                                <img class="rate-your-bookmark-star-hollow" id="star-rating-2" src="img/icon-star-hollow.png">
+                            </div>
+
+                            <div class="rate-your-bookmark-star-container">
+                                <img class="rate-your-bookmark-star-hollow" id="star-rating-3" src="img/icon-star-hollow.png">
+                            </div>
+
+                            <div class="rate-your-bookmark-star-container">
+                                <img class="rate-your-bookmark-star-hollow" id="star-rating-4" src="img/icon-star-hollow.png">
+                            </div>
+
+                            <div class="rate-your-bookmark-star-container">
+                                <img class="rate-your-bookmark-star-hollow" id="star-rating-5" src="img/icon-star-hollow.png">
+                            </div>
+                        
+                        </div>
+
+                        <div id="describe-your-bookmark-container">
+
+                            <label for="add-bookmark-description" id="add-bookmark-description-label" name="add-bookmark-description-label">Add A Bookmark Description</label>
+                            
+                            <textarea name="add-bookmark-description" id="add-bookmark-description" placeholder="Enter your description here" rows="4"></textarea>
+
+                        </div>
+
+                        <div id="bookmarks-form-buttons-container">
+
+                        <input type="reset" value="Cancel">
+                        <input type="submit" value="Create">
+
+                        </div>
+
+					</div>`;
+        
+};
+
+const editBookmarkScreenHTML = () => {
+    return `
+    				<div id="add-bookmark-container">
+
+                        <div id="existing-bookmark-id-container">
+
+                            <input type="hidden" id="existing-bookmark-id" name="existing-bookmark-id">
+                    
+                        </div>
 
                         <div id="title-your-bookmark-container">
 
@@ -231,16 +305,47 @@ const addBookmark = () => {
 		
 		e.preventDefault ();
 
-        newBookmark = {
+        // Does the bookmark already exist?
+        let bookmarkExists = store.bookmarks.find ( element =>  element.id === $ ( '#existing-bookmark-id' ).val() );
+
+        // Editing a bookmark.
+        if ( bookmarkExists !== false ){            
+            
+            // Find the index of the existing bookmark.
+            let bookmarkIndex = store.bookmarks.findIndex ( element => element.id === $ ( '#existing-bookmark-id' ).val() );
+            
+            // Remove the existing bookmark.
+            store.bookmarks.splice ( bookmarkIndex, 1 );
+
+            // Create the new edited bookmark obj. 
+            newBookmark = {
         
-            id: cuid(),
-            title: $ ( '#add-bookmark-title' ).val(),
-            rating: $ ( '#bookmark-rating' ).val(),
-            url: $ ( '#add-bookmark-url' ).val(),
-            description: $ ( '#add-bookmark-description' ).val(),
-            expanded: true
+                id: $ ( '#existing-bookmark-id' ).val(),
+                title: $ ( '#add-bookmark-title' ).val(),
+                rating: $ ( '#bookmark-rating' ).val(),
+                url: $ ( '#add-bookmark-url' ).val(),
+                description: $ ( '#add-bookmark-description' ).val(),
+                expanded: true
+            
+            };
+
+        }
+
+        // New bookmark.
+        else {
+
+            newBookmark = {
         
-        };
+                id: cuid(),
+                title: $ ( '#add-bookmark-title' ).val(),
+                rating: $ ( '#bookmark-rating' ).val(),
+                url: $ ( '#add-bookmark-url' ).val(),
+                description: $ ( '#add-bookmark-description' ).val(),
+                expanded: true
+            
+            };
+
+        }
 
         store.bookmarks.push ( newBookmark );
 
@@ -273,6 +378,32 @@ const deleteBookmark = () => {
         store.bookmarks = [ ...newBookmarksList ];
 
         render ();
+
+    });
+
+};
+
+const editBookmark = () => {
+// Edit an existing bookmark obj.
+
+    $ ( 'main' ).on ( 'click', '.bookmarks-edit-icon', e => {
+
+        store.adding = 3;
+
+        render ();
+        
+        let bookmarkId = $ ( e.currentTarget ).parent ().parent ().parent ().attr ( 'id' );
+                
+        let bookmark = store.bookmarks.find ( element => element.id === bookmarkId )
+
+        $ ( '#existing-bookmark-id' ).val( bookmarkId );
+        $ ( '#add-bookmark-title' ).val( bookmark.title );
+        $ ( '#bookmark-rating' ).val( bookmark.rating );
+        $ ( '#add-bookmark-url' ).val( bookmark.url );
+        $ ( '#add-bookmark-description' ).val( bookmark.description );
+
+        // Set UI elements.
+        for ( i = 0; i < bookmark.rating; i++) $ ( `#star-rating-${ i + 1 }` ).attr ( 'src', 'img/icon-star-filled.png' );
 
     });
 
@@ -382,14 +513,21 @@ const render = () => {
     // State 0 - Display the list of bookmarks.
     if ( store.adding === false ) {
 
-        $ ( 'main' ).html ( `${ htmlOpen }${ BookmarkListScreenHTML ( htmlMiddle ) }${ htmlClose }` );
+        $ ( 'main' ).html ( `${ htmlOpen }${ bookmarkListScreenHTML ( htmlMiddle ) }${ htmlClose }` );
 
     }
 
     // State 1 - Display the add bookmark screen.
     if ( store.adding === true ) {
 
-        $ ( 'main' ).html ( `${ htmlOpen }${ AddBookmarkScreenHTML ( htmlMiddle ) }${ htmlClose }` );
+        $ ( 'main' ).html ( `${ htmlOpen }${ addBookmarkScreenHTML ( htmlMiddle ) }${ htmlClose }` );
+
+    }
+
+    // State 1 - Display the add bookmark screen.
+    if ( store.adding === 3 ) {
+
+        $ ( 'main' ).html ( `${ htmlOpen }${ editBookmarkScreenHTML ( htmlMiddle ) }${ htmlClose }` );
 
     }
     
@@ -417,6 +555,9 @@ const bindEventHandlers = () => {
 
     //
     deleteBookmark ();
+
+    //
+    editBookmark ();
 
     //
     resetAddBookmark ();
