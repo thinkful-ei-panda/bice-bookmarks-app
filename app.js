@@ -1,22 +1,5 @@
 const store = {
-    bookmarks: [
-        {
-            id: 'x56w',
-            title: 'Title 1',
-            rating: 3,
-            url: 'http://www.title1.com',
-            description: 'lorem ipsum dolor sit',
-            expanded: false
-          },
-          {
-            id: '6ffw',
-            title: 'Title 2',
-            rating: 5,
-            url: 'http://www.title2.com',
-            description: 'dolorum tempore deserunt',
-            expanded: false
-          } 
-    ],
+    bookmarks: [],
     adding: false,
     error: null,
     filter: 0
@@ -96,7 +79,7 @@ const bookmarkListScreenHTML = () => {
                             </a>
                         </div>
                         <div class="bookmarks-description-container">
-                            ${ item.description }
+                            ${ item.desc }
                         </div>
                         <div class="bookmarks-trash-icon-container">
                             <img class="bookmarks-trash-icon" src="img/icon-trash.png" alt="Delete this bookmark">
@@ -309,10 +292,10 @@ const addBookmark = () => {
         let bookmarkExists = store.bookmarks.find ( element =>  element.id === $ ( '#existing-bookmark-id' ).val() );
 
         // Editing a bookmark.
-        if ( bookmarkExists !== false ){            
+        if ( bookmarkExists !== undefined ){            
             
             // Find the index of the existing bookmark.
-            let bookmarkIndex = store.bookmarks.findIndex ( element => element.id === $ ( '#existing-bookmark-id' ).val() );
+           let bookmarkIndex = store.bookmarks.findIndex ( element => element.id === $ ( '#existing-bookmark-id' ).val() );
             
             // Remove the existing bookmark.
             store.bookmarks.splice ( bookmarkIndex, 1 );
@@ -324,10 +307,12 @@ const addBookmark = () => {
                 title: $ ( '#add-bookmark-title' ).val(),
                 rating: $ ( '#bookmark-rating' ).val(),
                 url: $ ( '#add-bookmark-url' ).val(),
-                description: $ ( '#add-bookmark-description' ).val(),
+                desc: $ ( '#add-bookmark-description' ).val(),
                 expanded: true
             
             };
+
+            storeData ( 'PATCH', newBookmark );
 
         }
 
@@ -340,12 +325,15 @@ const addBookmark = () => {
                 title: $ ( '#add-bookmark-title' ).val(),
                 rating: $ ( '#bookmark-rating' ).val(),
                 url: $ ( '#add-bookmark-url' ).val(),
-                description: $ ( '#add-bookmark-description' ).val(),
+                desc: $ ( '#add-bookmark-description' ).val(),
                 expanded: true
             
             };
 
+            storeData ( 'POST', newBookmark );
+
         }
+
 
         store.bookmarks.push ( newBookmark );
 
@@ -362,6 +350,8 @@ const deleteBookmark = () => {
     $ ( 'main' ).on ( 'click', '.bookmarks-trash-icon', e => {
 
         let bookmarkId = $ ( e.currentTarget ).parent ().parent ().parent ().attr ( 'id' );
+
+        storeData ( 'DELETE', bookmarkId );
 
         let newBookmarksList = [];
 
@@ -393,14 +383,14 @@ const editBookmark = () => {
         render ();
         
         let bookmarkId = $ ( e.currentTarget ).parent ().parent ().parent ().attr ( 'id' );
-                
+        
         let bookmark = store.bookmarks.find ( element => element.id === bookmarkId )
 
         $ ( '#existing-bookmark-id' ).val( bookmarkId );
         $ ( '#add-bookmark-title' ).val( bookmark.title );
         $ ( '#bookmark-rating' ).val( bookmark.rating );
         $ ( '#add-bookmark-url' ).val( bookmark.url );
-        $ ( '#add-bookmark-description' ).val( bookmark.description );
+        $ ( '#add-bookmark-description' ).val( bookmark.desc );
 
         // Set UI elements.
         for ( i = 0; i < bookmark.rating; i++) $ ( `#star-rating-${ i + 1 }` ).attr ( 'src', 'img/icon-star-filled.png' );
@@ -434,7 +424,8 @@ const render = () => {
 
     let htmlOpen = `
     <div id="form-container">
-				
+        <div id="error-message"></div>
+
         <form id="bookmarks-form" name="bookmarks-form">
 
 		    <legend for="bookmarks"><h2>${ h2 }</h2></legend>
@@ -533,6 +524,85 @@ const render = () => {
     
 };
 
+function storeData ( method, bookmark ) {
+
+    let baseURL = 'https://thinkful-list-api.herokuapp.com/bice/bookmarks';
+
+    let params;
+
+    if ( method === 'DELETE' ) {
+        
+        baseURL += `/${ bookmark }`
+
+        params = {
+
+            method: method,
+
+        }
+
+    }
+
+    if ( method === 'PATCH' ) {
+
+        baseURL += `/${ bookmark.id }`
+
+        params = {
+            
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify ( bookmark )
+
+        }
+
+    }
+
+
+    if ( method === 'POST' ) {
+
+        params = {
+            
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify ( bookmark )
+
+        }
+
+    }
+
+    else params = { method: method };
+
+    fetch ( baseURL, params )
+
+        .then ( response => {
+
+            if ( response.ok ) {
+
+                return response.json ();
+
+            }
+
+            throw new Error ( response.statusText );
+
+        })
+
+        .then ( responseJson => {
+        
+            store.bookmarks = responseJson;
+
+            render ();
+
+        })
+
+        .catch ( err => {
+
+            //console.log ( err.message );
+            $ ( '#error-message' ).text ( `Something went wrong: ${err.message}` );
+            $ ( '#error-message' ).css ( 'display', 'block' );
+
+        });
+
+}
+
 const bindEventHandlers = () => {
 // Bind event handlers.
 
@@ -569,7 +639,7 @@ const bindEventHandlers = () => {
 const init = () => {
 // Initialized app.
     
-    render ();
+    storeData ( 'GET' )
 
     bindEventHandlers ();
 

@@ -29,6 +29,12 @@ h3 {
 	font-size: 44px;
 }
 
+#error-message {
+	display: none;
+	height: 100%;
+	width: 100%;
+}
+
 #form-container {
 	flex: 1;
 	margin: 16px auto 16px auto;
