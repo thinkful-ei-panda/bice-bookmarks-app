@@ -530,21 +530,7 @@ function storeData ( method, bookmark ) {
 
     let params;
 
-    if ( method === 'DELETE' ) {
-        
-        baseURL += `/${ bookmark }`
-
-        params = {
-
-            method: method,
-
-        }
-
-    }
-
-    if ( method === 'PATCH' ) {
-
-        baseURL += `/${ bookmark.id }`
+    if ( method === 'POST' ) {
 
         params = {
             
@@ -556,8 +542,25 @@ function storeData ( method, bookmark ) {
 
     }
 
+    else if ( method === 'DELETE' ) {
+        
+        baseURL += `/${ bookmark }`
 
-    if ( method === 'POST' ) {
+        params = {
+
+            method: method,
+
+        }
+
+    }
+
+    else if ( method === 'PATCH' ) {
+
+        baseURL += `/${ bookmark.id }`
+
+        delete bookmark.id;
+
+        delete bookmark.expanded;
 
         params = {
             
@@ -587,7 +590,7 @@ function storeData ( method, bookmark ) {
 
         .then ( responseJson => {
         
-            store.bookmarks = responseJson;
+            if ( method === 'GET' ) store.bookmarks = responseJson;
 
             render ();
 
